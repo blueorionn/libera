@@ -4,7 +4,7 @@ import os
 from flask import current_app, Blueprint, render_template, send_file
 from flask.views import MethodView
 from .func import list_books
-from booklist.utils import hyphenate_text
+from libera.utils import hyphenate_text
 
 blueprint = Blueprint("core", __name__)
 

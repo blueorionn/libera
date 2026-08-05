@@ -1,5 +1,5 @@
 from typing import List, NamedTuple
-from booklist.database import db
+from libera.database import db
 
 
 class BookType(NamedTuple):

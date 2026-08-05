@@ -1,5 +1,5 @@
 # wsgi.py
-from booklist import create_app
+from libera import create_app
 
 # 'app' is the WSGI callable that Gunicorn looks for.
 app = create_app()

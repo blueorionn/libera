@@ -2,8 +2,8 @@ import uuid
 import bcrypt
 import datetime
 from datetime import timedelta
-from booklist.database import db
-from booklist.utils import is_valid_uuid_v4
+from libera.database import db
+from libera.utils import is_valid_uuid_v4
 
 
 def authenticate_user(username: str, password: str):

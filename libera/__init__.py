@@ -2,11 +2,11 @@
 
 from flask import Flask, render_template
 
-from booklist import core, auth
-from booklist.settings import config
-from booklist.extensions import init_cors
-from booklist.database import db
-from booklist.middleware import authentication_middleware
+from libera import core, auth
+from libera.settings import config
+from libera.extensions import init_cors
+from libera.database import db
+from libera.middleware import authentication_middleware
 
 
 def create_app(config_object=config):
