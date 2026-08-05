@@ -15,6 +15,9 @@ class Config:
     # File size restriction
     MAX_CONTENT_LENGTH = 24 * 1024 * 1024  # 24 megabytes
 
+    S3_BUCKET_NAME = os.environ.get("S3_BUCKET_NAME")
+    S3_BUCKET_URI = os.environ.get("S3_BUCKET_URI")
+
     # Database — single URI consumed directly by SQLAlchemy.
     #   MySQL:    mysql+pymysql://user:pass@host:port/dbname
     #   SQLite:   sqlite:///data.db

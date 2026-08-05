@@ -2,6 +2,8 @@
 
 import secrets
 import uuid
+import boto3
+from flask import current_app
 from urllib.parse import urlparse
 
 
@@ -39,3 +41,21 @@ def parse_db_uri(uri: str):
         "password": parsed.password or "",
         "name": parsed.path.lstrip("/") or "",
     }
+
+def upload_to_s3(file_obj, object_key, content_type=None):
+    """Upload a file-like object to an S3 bucket.
+
+    Args:
+        file_obj: A file-like object (e.g. from ``request.files["poster"]``).
+        bucket_name: The S3 bucket name.
+        object_key: The S3 object key / path (e.g. ``"posters/filename.jpg"``).
+        content_type: Optional MIME type to set on the object.
+    """
+    extra_args = {}
+    if content_type:
+        extra_args["ContentType"] = content_type
+
+    s3 = boto3.client("s3")
+    s3.upload_fileobj(
+        file_obj, current_app.config["S3_BUCKET_NAME"], object_key, ExtraArgs=extra_args
+    )
