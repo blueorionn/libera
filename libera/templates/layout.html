@@ -35,6 +35,7 @@
 
           <!-- Right: User Info -->
           <div class="flex items-center space-x-4">
+            {% if current_user %}
             <a href="/auth/user/profile" class="flex flex-col items-center">
               <div
                 class="flex h-10 w-10 p-2 items-center justify-center rounded-full bg-indigo-200 text-sm font-bold text-white"
@@ -45,14 +46,19 @@
             </a>
             <button class="rounded-lg bg-red-600 px-4 py-2 text-sm font-medium hover:bg-red-500" id="logout-button">
               <span>Logout</span>
-              <script>
-                const logOutButton = document.getElementById('logout-button');
-                logOutButton.addEventListener('click', function () {
-                  document.cookie = `session=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
-                  location.reload(true);
-                });
-              </script>
             </button>
+            <script>
+              const logOutButton = document.getElementById('logout-button');
+              logOutButton.addEventListener('click', function () {
+                document.cookie = 'session=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+                location.reload(true);
+              });
+            </script>
+            {% else %}
+            <a href="/auth/login" class="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium hover:bg-indigo-500">
+              Login
+            </a>
+            {% endif %}
           </div>
         </div>
       </nav>

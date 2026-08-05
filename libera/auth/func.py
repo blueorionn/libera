@@ -1,97 +1,63 @@
+"""Authentication helpers — user lookup, session creation, validation."""
+
 import uuid
+from datetime import datetime, timedelta
+
 import bcrypt
-import datetime
-from datetime import timedelta
+
 from libera.database import db
+from libera.models import Session, User
 from libera.utils import is_valid_uuid_v4
 
 
-def authenticate_user(username: str, password: str):
-    """Check if user exists with valid credentials."""
+def authenticate_user(username: str, password: str) -> bool:
+    """Return ``True`` if *username* exists and *password* matches."""
+    user = db.session.query(User).filter(User.username == username).first()
 
-    query = """
-        SELECT id,username,password FROM users WHERE username = %s
-    """
-
-    # get user
-    user = db.query(query, (username,), fetchone=True)
-
-    # If user exist
-    if user is not None:
-        # Checking if password is correct
-        _id, _username, _password = user["id"], user["username"], user["password"]
-
-        if (
-            (bcrypt.checkpw(password.encode("utf-8"), _password.encode("utf-8")))
-            and (username == _username)
-            and is_valid_uuid_v4(_id)
-        ):
-            return True
-        else:
-            return False
-    else:
+    if user is None:
         return False
+
+    return (
+        bcrypt.checkpw(password.encode("utf-8"), user.password.encode("utf-8"))
+        and is_valid_uuid_v4(user.id)
+    )
 
 
 def get_userdata_from_session(session_id: str):
-    """Get User Data From Session Id"""
-    query = """
-        SELECT user_id FROM sessions WHERE session_id = %s
-    """
+    """Return the ``User`` associated with *session_id*, or ``None``."""
+    sess = (
+        db.session.query(Session)
+        .filter(Session.session_id == session_id)
+        .first()
+    )
 
-    # get userid from session id
-    session = db.query(query, (session_id,), fetchone=True)
-    user_id = session["user_id"] if session else None
-
-    # get user data
-    if user_id is not None and is_valid_uuid_v4(user_id):
-        userdata = db.query(
-            "SELECT id, first_name, last_name, username, role, created_at FROM users WHERE id = %s",
-            (user_id,),
-            fetchone=True,
-        )
-        return userdata if userdata else None
-    else:
+    if sess is None or not is_valid_uuid_v4(sess.user_id):
         return None
+
+    user = db.session.query(User).filter(User.id == sess.user_id).first()
+    return user
 
 
 def get_userid(username: str):
-    """Get UserId By Username"""
-    query = """
-        SELECT id FROM users WHERE username = %s
-    """
-
-    # get user id
-    userid = db.query(query, (username,), fetchone=True)
-
-    return userid["id"] or None
+    """Return the user id for *username*, or ``None``."""
+    user = db.session.query(User).filter(User.username == username).first()
+    return user.id if user else None
 
 
-def create_session(userid: str, username: str):
-    """Create user session"""
-
-    query = """
-        INSERT INTO sessions (
-            session_id,
-            user_id,
-            username,
-            creation_date,
-            expiry_date
-        ) VALUES (
-            %s,
-            %s,
-            %s,
-            %s,
-            %s
-        )
-    """
-
+def create_session(userid: str, username: str) -> str:
+    """Create a new session row and return the generated session id."""
     session_id = str(uuid.uuid4())
-    creation_date = datetime.datetime.now()
-    # Session id valid till 1 hour.
-    expiry_date = creation_date + timedelta(hours=1)
+    now = datetime.now()
+    expires = now + timedelta(hours=1)
 
-    # Create session
-    db.insert(query, (session_id, userid, username, creation_date, expiry_date))
+    sess = Session(
+        session_id=session_id,
+        user_id=userid,
+        username=username,
+        creation_date=now,
+        expiry_date=expires,
+    )
+    db.session.add(sess)
+    db.session.commit()
 
     return session_id

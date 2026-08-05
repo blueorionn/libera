@@ -1,61 +1,72 @@
-"""MySQL database connection and query helper for Flask applications."""
+"""SQLAlchemy database session management for Flask."""
 
-import mysql.connector
-from flask import current_app, g
+from sqlalchemy import create_engine
+from sqlalchemy.orm import scoped_session, sessionmaker
 
 
-class DBConnector:
-    def __init__(self, app=None):
-        self.app = app
+class DB:
+    """Thin wrapper around SQLAlchemy engine + scoped_session.
+
+    Usage in the Flask app::
+
+        db.init_app(app)          # call once during factory
+        db.create_all()           # create tables if they don't exist
+        db.session                # request-scoped session (use inside views)
+
+    Usage in standalone scripts::
+
+        db = DB(db_uri="mysql+pymysql://...")
+        with db.session() as sess:
+            ...
+    """
+
+    def __init__(self, app=None, db_uri=None):
+        self.engine = None
+        self._session_factory = None
         if app is not None:
             self.init_app(app)
+        elif db_uri is not None:
+            self.init_uri(db_uri)
+
+    # -- Flask integration ---------------------------------------------------
 
     def init_app(self, app):
-        # Teardown: close connection after request
-        app.teardown_appcontext(self.close_connection)
+        """Wire up SQLAlchemy with a Flask application."""
+        db_uri = app.config["DB_URI"]
+        self._setup(db_uri)
+        app.teardown_appcontext(self._close_session)
 
-    def get_connection(self):
-        if "db_conn" not in g:
-            g.db_conn = mysql.connector.connect(
-                host=current_app.config["DB_HOST"],
-                user=current_app.config["DB_USER"],
-                password=current_app.config["DB_PASSWORD"],
-                database=current_app.config["DB_NAME"],
-                port=current_app.config["DB_PORT"],
-            )
-        return g.db_conn
+    def _setup(self, db_uri):
+        self.engine = create_engine(db_uri, echo=False)
+        self._session_factory = scoped_session(
+            sessionmaker(bind=self.engine, autoflush=False, autocommit=False)
+        )
 
-    def query(self, query, params=None, fetchone=False, fetchall=False):
-        conn = self.get_connection()
-        cursor = conn.cursor(dictionary=True)
+    @property
+    def session(self):
+        """Return the current request-scoped session."""
+        if self._session_factory is None:
+            raise RuntimeError("DB.init_app() has not been called")
+        return self._session_factory()
 
-        cursor.execute(query, params or ())
+    def _close_session(self, exception=None):
+        if self._session_factory is not None:
+            self._session_factory.remove()
 
-        result = None
-        if fetchone:
-            result = cursor.fetchone()
-        elif fetchall:
-            result = cursor.fetchall()
+    # -- Standalone helper ---------------------------------------------------
 
-        cursor.close()
-        return result
+    def init_uri(self, db_uri):
+        """Initialise with just a URI (for scripts / tests)."""
+        self._setup(db_uri)
 
-    def insert(self, query, params=None):
-        conn = self.get_connection()
-        cursor = conn.cursor()
+    # -- Table creation ------------------------------------------------------
 
-        cursor.execute(query, params or ())
-        conn.commit()
-        last_id = cursor.lastrowid
+    def create_all(self):
+        """Create all tables defined in :mod:`libera.models`."""
+        from . import models  # noqa: F401  — ensure models are imported
 
-        cursor.close()
-        return last_id
-
-    def close_connection(self, exception=None):
-        conn = g.pop("db_conn", None)
-        if conn is not None:
-            conn.close()
+        models.Base.metadata.create_all(self.engine)
 
 
-# database instance
-db = DBConnector()
+# Singleton used by the Flask app.
+db = DB()

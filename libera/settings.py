@@ -1,6 +1,8 @@
 """Application Configuration."""
 
 import os
+from urllib.parse import quote_plus
+
 from .utils import generate_secret_key
 
 
@@ -12,23 +14,28 @@ class Config:
     PROJECT_ROOT = os.path.abspath(os.path.join(APP_DIR, os.pardir))
     # File size restriction
     MAX_CONTENT_LENGTH = 24 * 1024 * 1024  # 24 megabytes
-    # Database — prefer single DB_URI, fall back to individual vars
-    _db_uri = os.environ.get("DB_URI", "")
-    if _db_uri:
-        from .utils import parse_db_uri
 
-        _db = parse_db_uri(_db_uri)
-        DB_HOST = _db["host"]
-        DB_NAME = _db["name"]
-        DB_USER = _db["user"]
-        DB_PASSWORD = _db["password"]
-        DB_PORT = _db["port"]
-    else:
-        DB_HOST = os.environ.get("DB_HOST")
-        DB_NAME = os.environ.get("DB_NAME")
-        DB_USER = os.environ.get("DB_USER")
-        DB_PASSWORD = os.environ.get("DB_PASSWORD")
-        DB_PORT = os.environ.get("DB_PORT")
+    # Database — single URI consumed directly by SQLAlchemy.
+    #   MySQL:    mysql+pymysql://user:pass@host:port/dbname
+    #   SQLite:   sqlite:///data.db
+    _db_uri = os.environ.get("DB_URI", "")
+    if not _db_uri:
+        # Fall back to individual env vars (backward-compatible).
+        _host = os.environ.get("DB_HOST", "")
+        _port = os.environ.get("DB_PORT", "3306")
+        _user = os.environ.get("DB_USER", "")
+        _pass = os.environ.get("DB_PASSWORD", "")
+        _name = os.environ.get("DB_NAME", "")
+        if _user and _name and _host:
+            _db_uri = (
+                f"mysql+pymysql://{_user}:{quote_plus(_pass)}"
+                f"@{_host}:{_port}/{_name}"
+            )
+        else:
+            # Default: local SQLite in the project root.
+            _db_uri = f"sqlite:///{os.path.join(PROJECT_ROOT, 'data.db')}"
+
+    DB_URI = _db_uri
 
 
 class DevelopmentConfig(Config):

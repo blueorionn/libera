@@ -1,18 +1,17 @@
 """Auth views."""
 
-from flask import Blueprint, request, render_template, make_response, redirect
+from flask import Blueprint, make_response, redirect, render_template, request
 from flask.views import MethodView
-from .func import (
-    authenticate_user,
-    get_userid,
-    create_session,
-    get_userdata_from_session,
-)
+
+from .decorators import login_required
+from .func import authenticate_user, create_session, get_userdata_from_session, get_userid
 
 blueprint = Blueprint("auth", __name__, url_prefix="/auth")
 
 
 class LoginView(MethodView):
+    """Public login page — no auth required."""
+
     def get(self):
         return render_template("auth/login.html")
 
@@ -22,36 +21,26 @@ class LoginView(MethodView):
 
         if authenticate_user(username, password):
             res = make_response(redirect("/"))
-            userId = get_userid(username)
-            sessionId = create_session(userId, username)
-            res.set_cookie("session", sessionId, max_age=3600, httponly=False)
+            user_id = get_userid(username)
+            session_id = create_session(user_id, username)
+            res.set_cookie("session", session_id, max_age=3600, httponly=False)
             return res
-        else:
-            message = {"message": "Username or password is invalid. "}
-            return render_template("auth/login.html", **message)
+
+        return render_template("auth/login.html", message="Username or password is invalid.")
 
 
 class UserProfileView(MethodView):
+    """Protected profile page — requires a valid session."""
+
+    decorators = [login_required]
+
     def get(self):
-        # session cookie
-        session_cookie = request.cookies.get("session")
-
-        if session_cookie is None:
-            return redirect("/auth/login")
-
-        # get user data from session id
-        userdata = get_userdata_from_session(session_cookie)
-
-        if userdata is None:
-            context = ({"error_code": 403, "error_message": "Forbidden"},)
-            return render_template("handlers/handler.html", **context)
-
-        context = {"user": userdata}
-        return render_template("profile/profile.html", **context)
+        session_id = request.cookies.get("session")
+        user = get_userdata_from_session(session_id)
+        return render_template("profile/profile.html", user=user)
 
 
-index_view = LoginView.as_view("login")
-blueprint.add_url_rule("/login", view_func=index_view)
+# -- URL rules ---------------------------------------------------------------
 
-user_profile_view = UserProfileView.as_view("profile")
-blueprint.add_url_rule("/user/profile", view_func=user_profile_view)
+blueprint.add_url_rule("/login", view_func=LoginView.as_view("login"))
+blueprint.add_url_rule("/user/profile", view_func=UserProfileView.as_view("profile"))

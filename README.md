@@ -10,23 +10,37 @@ This project is a Flask-based web application that explores session authenticati
 
 - Flask
 - Tailwindcss
-- MariaDB
+- SQLAlchemy (MySQL/MariaDB or SQLite)
 
 ## Database Setup
 
-Required a **MySQL/MariaDB** database local or cloud.
+Works with **MySQL/MariaDB** (remote or local) or **SQLite** (zero-config
+local development).
 
-Create the movie table and load data as specified in the `data/books.sql` file.
+### MySQL / MariaDB
+
+```bash
+# 1. Create the database (once)
+mysql -u root -p -e "CREATE DATABASE booklist CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+
+# 2. Load seed data
+DB_URI="mysql+pymysql://user:password@host:3306/booklist" python scripts/load_data.py
+```
+
+### SQLite (local dev — no setup required)
+
+```bash
+python scripts/load_data.py    # defaults to ./data.db
+```
 
 ## User Creation
 
-To create a user, use the script with the following options. **Before beginning, make sure to properly load all environment variables listed in the [Installation section](#installation).**
-
 ```bash
-python scripts/register_user.py -fn [first_name] -ln [lastname] -u [username] -p [password] -r [role] 
+DB_URI="mysql+pymysql://..." python scripts/register_user.py \
+    -fn Alice -ln Smith -u alice -p s3cret123 -r user
 ```
 
-**Valid user roles are `admin` and `user`.**
+**Valid roles are `admin` and `user`.**
 
 ## Installation
 
