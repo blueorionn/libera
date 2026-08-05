@@ -2,6 +2,7 @@
 
 import secrets
 import uuid
+from urllib.parse import urlparse
 
 
 def generate_secret_key():
@@ -21,3 +22,20 @@ def is_valid_uuid_v4(id_str):
 
 def hyphenate_text(text: str):
     return "-".join(text.lower().split(" "))
+
+
+def parse_db_uri(uri: str):
+    """Parse a MySQL connection URI into its components.
+
+    Format: mysql://user:password@host:port/dbname
+
+    Returns a dict with keys: host, port, user, password, name
+    """
+    parsed = urlparse(uri)
+    return {
+        "host": parsed.hostname or "localhost",
+        "port": parsed.port or 3306,
+        "user": parsed.username or "",
+        "password": parsed.password or "",
+        "name": parsed.path.lstrip("/") or "",
+    }

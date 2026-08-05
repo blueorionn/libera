@@ -7,6 +7,46 @@ import bcrypt
 import sys
 import mysql.connector
 import datetime
+from urllib.parse import urlparse
+
+
+def _parse_db_connection():
+    """Parse DB_URI env var (or fall back to individual DB_* vars).
+
+    Returns a dict with keys: host, port, user, password, name
+    """
+    db_uri = os.environ.get("DB_URI", "")
+    if db_uri:
+        parsed = urlparse(db_uri)
+        return {
+            "host": parsed.hostname or "localhost",
+            "port": parsed.port or 3306,
+            "user": parsed.username or "",
+            "password": parsed.password or "",
+            "name": parsed.path.lstrip("/") or "",
+        }
+
+    # Fallback to individual vars
+    host = os.environ.get("DB_HOST") or ""
+    name = os.environ.get("DB_NAME") or ""
+    user = os.environ.get("DB_USER") or ""
+    password = os.environ.get("DB_PASSWORD") or ""
+    port = os.environ.get("DB_PORT") or 3306
+
+    if not host:
+        raise ValueError("DB_URI not set and DB_HOST is empty")
+    if not name:
+        raise ValueError("DB_URI not set and DB_NAME is empty")
+    if not user:
+        raise ValueError("DB_URI not set and DB_USER is empty")
+
+    return {
+        "host": host,
+        "port": int(port),
+        "user": user,
+        "password": password,
+        "name": name,
+    }
 
 
 def create_user_table():
@@ -62,22 +102,12 @@ def get_create_user_query():
 
 
 def main():
-    DB_HOST = os.environ.get("DB_HOST")
-    DB_NAME = os.environ.get("DB_NAME")
-    DB_USER = os.environ.get("DB_USER")
-    DB_PASSWORD = os.environ.get("DB_PASSWORD")
-    DB_PORT = os.environ.get("DB_PORT")
-
-    if DB_HOST == None or len(DB_HOST) < 1:
-        raise ValueError("Invalid or emtpy db host")
-    if DB_NAME == None or len(DB_NAME) < 1:
-        raise ValueError("Invalid or emtpy db name")
-    if DB_USER == None or len(DB_USER) < 1:
-        raise ValueError("Invalid or empty db user")
-    if DB_PASSWORD == None or len(DB_PASSWORD) < 1:
-        raise ValueError("Invalid or emtpy db password")
-    if DB_PORT == None or len(DB_PORT) < 1:
-        raise ValueError("Invalid or emtpy db port")
+    _db = _parse_db_connection()
+    DB_HOST = _db["host"]
+    DB_NAME = _db["name"]
+    DB_USER = _db["user"]
+    DB_PASSWORD = _db["password"]
+    DB_PORT = _db["port"]
 
     # Add arguments
     parser = argparse.ArgumentParser(

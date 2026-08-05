@@ -65,12 +65,12 @@ python scripts/register_user.py -fn [first_name] -ln [lastname] -u [username] -p
    export PYTHONDONTWRITEBYTECODE=1
    export FLASK_ENV="development"
    export SECRET_KEY="your-secret-key"
-   export DB_HOST="your-database-host"
-   export DB_NAME="your-database-name"
-   export DB_USER="your-database-username"
-   export DB_PASSWORD="your-database-password"
-   export DB_PORT="your-database-port"
+   export DB_URI="mysql://user:password@host:port/dbname"
    ```
+
+   > `DB_URI` replaces the old `DB_HOST`, `DB_NAME`, `DB_USER`, `DB_PASSWORD`,
+   > and `DB_PORT` variables.  The old individual variables still work as a
+   > fallback when `DB_URI` is not set.
 
 5. Run the Flask app:
 
