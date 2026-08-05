@@ -25,4 +25,4 @@ todo/
 .codewhale
 
 # exclude tailwind utilites
-booklist/static/styles/style.css
+libera/static/styles/style.css
