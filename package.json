@@ -1,17 +1,17 @@
 {
-  "name": "flask-booklist",
+  "name": "libera",
   "version": "1.0.0",
   "description": "BookList Collection Web Application.",
   "private": true,
   "scripts": {
-    "watchCss": "npx tailwindcss -i ./booklist/static/styles/tailwind.css -o ./booklist/static/styles/style.css --watch",
-    "buildCss": "npx tailwindcss -i ./booklist/static/styles/tailwind.css -o ./booklist/static/styles/style.css --minify",
+    "watchCss": "npx tailwindcss -i ./libera/static/styles/tailwind.css -o ./libera/static/styles/style.css --watch",
+    "buildCss": "npx tailwindcss -i ./libera/static/styles/tailwind.css -o ./libera/static/styles/style.css --minify",
     "format": "prettier --write \"**/*.{html,css,js}\"",
     "format:check": "prettier --check \"**/*.{html,css,js}\""
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/blueorionn/Flask-BookList.git"
+    "url": "git+https://github.com/blueorionn/libera.git"
   },
   "author": "Swadhin",
   "license": "MIT",
