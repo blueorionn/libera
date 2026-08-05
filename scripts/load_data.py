@@ -134,6 +134,138 @@ VALUES
         'Douglas Adams',
         'Pan Books',
         4.4
+    ),
+    (
+        '7a2f9c3e-4b8d-4f61-9c2e-5d8a1b3c7e4f',
+        '1984',
+        'In a dystopian future ruled by the omnipresent Big Brother, Winston Smith works at the Ministry of Truth rewriting historical records to match the Party''s ever-changing narrative. His secret rebellion and forbidden love affair with Julia draw him into a confrontation with the totalitarian state, in a chilling exploration of surveillance, censorship, and individual freedom.',
+        9780451524935,
+        'Dystopian, Classics',
+        1949,
+        'George Orwell',
+        'Signet Classic',
+        4.6
+    ),
+    (
+        '3d6e8b1a-9c2f-4e7d-8b3a-1f4c9d6e2b7a',
+        'The Great Gatsby',
+        'Set in the glittering Jazz Age of 1920s New York, this American classic follows the enigmatic millionaire Jay Gatsby and his obsessive pursuit of the beautiful Daisy Buchanan. Through the eyes of narrator Nick Carraway, the novel reveals the corruption beneath the era''s glamour and ends in one of literature''s most famous tragedies.',
+        9780743273565,
+        'Fiction, Classics',
+        1925,
+        'F. Scott Fitzgerald',
+        'Scribner',
+        4.2
+    ),
+    (
+        'c5a9e2d4-7b3f-4a8c-9d1e-6f2b4c8a3e5d',
+        'Pride and Prejudice',
+        'Elizabeth Bennet, the witty and independent second daughter of the Bennet family, clashes with the proud and wealthy Mr. Darcy in this beloved Regency-era romance. Through sharp social commentary and sparkling dialogue, Jane Austen crafts a timeless story of first impressions, family expectations, and love that overcomes pride and prejudice.',
+        9780141439518,
+        'Romance, Classics',
+        1813,
+        'Jane Austen',
+        'Penguin Classics',
+        4.5
+    ),
+    (
+        '8f1c4b7e-2d6a-4e9b-8c3f-5a7d2e9b1c4f',
+        'The Catcher in the Rye',
+        'Disillusioned teenager Holden Caulfield recounts three restless days in New York City after being expelled from prep school. His cynical observations of what he calls the ''phony'' adult world and his longing to protect childhood innocence made this novel a defining voice of postwar American adolescence.',
+        9780316769488,
+        'Fiction, Classics',
+        1951,
+        'J.D. Salinger',
+        'Little, Brown and Company',
+        4.0
+    ),
+    (
+        '1b7d3f9a-5c2e-4b8d-9a6f-3e1c7b5d2a9f',
+        'The Fellowship of the Ring',
+        'The first volume of J.R.R. Tolkien''s epic The Lord of the Rings follows young hobbit Frodo Baggins, who inherits the One Ring, an artifact of immense power that must be destroyed in the fires of Mount Doom. He and the Fellowship of nine companions set out across Middle-earth, pursued by the dark forces of the fallen Maia Sauron.',
+        9780547928210,
+        'Fantasy, Adventure',
+        1954,
+        'J.R.R. Tolkien',
+        'Mariner Books',
+        4.7
+    ),
+    (
+        '4e6c2a8d-9f3b-4d7c-8e1a-2b5f9c4d6e3a',
+        'The Hobbit',
+        'Bilbo Baggins, a comfortable and unadventurous hobbit, is swept into an epic quest when the wizard Gandalf and thirteen dwarves arrive at his door, seeking to reclaim their stolen treasure from the dragon Smaug. Along the way, Bilbo discovers courage he never knew he had and comes into possession of a mysterious ring.',
+        9780547928227,
+        'Fantasy, Adventure',
+        1937,
+        'J.R.R. Tolkien',
+        'Mariner Books',
+        4.6
+    ),
+    (
+        '2a8f5d1c-7b4e-4c9a-8d3f-6e1b9a4c7f2d',
+        'The Da Vinci Code',
+        'Harvard symbologist Robert Langdon is summoned to the Louvre after the murder of a curator, whose body is found surrounded by cryptic symbols. Teaming up with cryptologist Sophie Neveu, Langdon uncovers a centuries-old conspiracy involving the Holy Grail, secret societies, and hidden messages in Leonardo da Vinci''s masterpieces.',
+        9780307474278,
+        'Thriller, Mystery',
+        2003,
+        'Dan Brown',
+        'Anchor Books',
+        3.9
+    ),
+    (
+        '9d3b7e2f-1c6a-4f8d-8b2e-5c4a9f1d7e3b',
+        'The Hunger Games',
+        'In the dystopian nation of Panem, sixteen-year-old Katniss Everdeen volunteers to take her younger sister''s place in the annual Hunger Games, a televised fight to the death between tributes from the twelve districts. Her defiance inside the arena ignites a spark of rebellion that threatens to engulf the entire nation.',
+        9780439023528,
+        'Dystopian, Young Adult',
+        2008,
+        'Suzanne Collins',
+        'Scholastic',
+        4.3
+    ),
+    (
+        '6f1e9c4b-3a8d-4b7f-9e2c-1d5a8f3b6e4c',
+        'Gone Girl',
+        'On their fifth wedding anniversary, Nick Dunne''s wife Amy vanishes under suspicious circumstances, and the mounting evidence points squarely at him. Alternating between Nick''s present-day account and Amy''s diary entries, this psychological thriller delivers one of the most shocking twists in modern crime fiction.',
+        9780307588371,
+        'Thriller, Mystery',
+        2012,
+        'Gillian Flynn',
+        'Crown Publishing Group',
+        4.1
+    ),
+    (
+        'b4d2a8f6-5e9c-4a3d-8f7b-2c6e1a9d4f3b',
+        'The Kite Runner',
+        'Amir, a privileged boy from Kabul, and Hassan, the son of his father''s servant, grow up inseparable until a single act of cowardice shatters their friendship. Years later, living in America, Amir returns to a war-torn Afghanistan to confront the past and seek the redemption he has long avoided.',
+        9781594480003,
+        'Historical Fiction, Drama',
+        2003,
+        'Khaled Hosseini',
+        'Riverhead Books',
+        4.5
+    ),
+    (
+        '7e3c9f1a-2b6d-4e8a-9c4f-5d2b8a1e7f3c',
+        'The Alchemist',
+        'Andalusian shepherd boy Santiago follows his recurring dream of treasure hidden near the Egyptian pyramids, leaving behind everything he knows to journey across the desert. Guided by a series of mentors, he learns to listen to his heart and pursue his Personal Legend, in this timeless fable about following one''s dreams.',
+        9780062315007,
+        'Fiction, Inspirational',
+        1988,
+        'Paulo Coelho',
+        'HarperOne',
+        4.2
+    ),
+    (
+        '5a1d7b3f-8c4e-4f2a-8d6b-3e9c1f5a7d2b',
+        'The Martian',
+        'When a fierce dust storm forces his crew to abandon Mars, astronaut Mark Watney is left behind, presumed dead. Stranded with limited supplies, he must rely on his ingenuity, botany skills, and sharp humor to survive on a hostile planet until a rescue mission can reach him.',
+        9780553418026,
+        'Science Fiction, Adventure',
+        2014,
+        'Andy Weir',
+        'Broadway Books',
+        4.5
     );
 
     """
