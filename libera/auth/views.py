@@ -4,7 +4,12 @@ from flask import Blueprint, make_response, redirect, render_template, request
 from flask.views import MethodView
 
 from .decorators import login_required
-from .func import authenticate_user, create_session, get_userdata_from_session, get_userid
+from .func import (
+    authenticate_user,
+    create_session,
+    get_userdata_from_session,
+    get_userid,
+)
 
 blueprint = Blueprint("auth", __name__, url_prefix="/auth")
 
@@ -26,7 +31,9 @@ class LoginView(MethodView):
             res.set_cookie("session", session_id, max_age=3600, httponly=False)
             return res
 
-        return render_template("auth/login.html", message="Username or password is invalid.")
+        return render_template(
+            "auth/login.html", message="Username or password is invalid."
+        )
 
 
 class UserProfileView(MethodView):

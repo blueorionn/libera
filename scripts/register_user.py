@@ -56,17 +56,23 @@ def main():
         description="Create a new user in the database.",
         epilog="User created!",
     )
-    parser.add_argument("-fn", "--first-name", required=True,
-                        help="First name of the user.")
-    parser.add_argument("-ln", "--last-name", default=None,
-                        help="Last name of the user (optional).")
-    parser.add_argument("-u", "--username", required=True,
-                        help="Username.")
-    parser.add_argument("-p", "--password", required=True,
-                        help="Password (minimum 8 characters).")
-    parser.add_argument("-r", "--role", required=True,
-                        choices=["admin", "user"],
-                        help="Role: admin or user.")
+    parser.add_argument(
+        "-fn", "--first-name", required=True, help="First name of the user."
+    )
+    parser.add_argument(
+        "-ln", "--last-name", default=None, help="Last name of the user (optional)."
+    )
+    parser.add_argument("-u", "--username", required=True, help="Username.")
+    parser.add_argument(
+        "-p", "--password", required=True, help="Password (minimum 8 characters)."
+    )
+    parser.add_argument(
+        "-r",
+        "--role",
+        required=True,
+        choices=["admin", "user"],
+        help="Role: admin or user.",
+    )
     args = parser.parse_args()
 
     # -- Validation ----------------------------------------------------------
@@ -74,9 +80,7 @@ def main():
         sys.exit("Password must be at least 8 characters.")
 
     # -- Create the user -----------------------------------------------------
-    hashed = bcrypt.hashpw(
-        args.password.encode("utf-8"), bcrypt.gensalt()
-    )
+    hashed = bcrypt.hashpw(args.password.encode("utf-8"), bcrypt.gensalt())
 
     user = User(
         id=str(uuid.uuid4()),

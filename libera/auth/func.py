@@ -17,19 +17,14 @@ def authenticate_user(username: str, password: str) -> bool:
     if user is None:
         return False
 
-    return (
-        bcrypt.checkpw(password.encode("utf-8"), user.password.encode("utf-8"))
-        and is_valid_uuid_v4(user.id)
-    )
+    return bcrypt.checkpw(
+        password.encode("utf-8"), user.password.encode("utf-8")
+    ) and is_valid_uuid_v4(user.id)
 
 
 def get_userdata_from_session(session_id: str):
     """Return the ``User`` associated with *session_id*, or ``None``."""
-    sess = (
-        db.session.query(Session)
-        .filter(Session.session_id == session_id)
-        .first()
-    )
+    sess = db.session.query(Session).filter(Session.session_id == session_id).first()
 
     if sess is None or not is_valid_uuid_v4(sess.user_id):
         return None
